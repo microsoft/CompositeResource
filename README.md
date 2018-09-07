@@ -1,5 +1,35 @@
+# Composite Resource Module
 
-# Contributing
+[![Build status](https://ci.appveyor.com/api/projects/status/c80a8uja31avfha4?svg=true)](https://ci.appveyor.com/project/mgreenegit/compositeresource)
+
+The purpose of this project is to provide a tool for converting
+[PowerShell Desired State Configuration](https://docs.microsoft.com/en-us/powershell/dsc/overview)
+[configurations](https://docs.microsoft.com/en-us/powershell/dsc/configurations)
+to
+[composite resources](https://docs.microsoft.com/en-us/powershell/dsc/authoringresourcecomposite).
+
+Usage:
+
+    ConvertTo-CompositeResource -ConfigurationName 'test' -Author 'Name' -Description 'Text'
+
+Output:
+
+    <no command output returned when successful>
+
+By default the tool will write a new folder based on the configuration name + 'dsc'.
+The folder contains a version folder which then contains a module and manifest.
+The module should be immediately functional once it is copied in to the psmodulepath.
+
+To test if the resource is available, run the command:
+
+    Get-DSCResource
+
+## Release Notes
+
+09/07/2018 - Michael Greene and Johan Ljunggren collaborated on a minimum viable product for the
+solution and published the result as an open source project on GitHub.
+
+## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
