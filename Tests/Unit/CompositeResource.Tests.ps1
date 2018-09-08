@@ -104,7 +104,7 @@ InModuleScope 'CompositeResource' {
 
                 $moduleManifest = Import-PowerShellDataFile -Path $moduleManifestPath
                 $moduleManifest.GUID | Should -Be $mockGuid
-                $moduleManifest.Author | Should -Be $env:USERNAME
+                $moduleManifest.Author | Should -Be 'Composite Resource Module'
                 $moduleManifest.CompanyName | Should -Be 'Unknown'
                 $moduleManifest.Copyright | Should -Be ('(c) {0} {1}. All rights reserved.' -f (Get-Date).Year, $env:USERNAME)
                 $moduleManifest.ModuleVersion | Should -Be '1.1.0'
