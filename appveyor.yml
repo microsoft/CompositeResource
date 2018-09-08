@@ -4,7 +4,7 @@
 os: Unstable
 version: 0.3.{build}.0
 install:
-  - cinst -y pester
+  - cinst -y pester, psdscresources
   - ps: Get-PackageProvider -Name NuGet -Force
 environment:
   APIKEY:
