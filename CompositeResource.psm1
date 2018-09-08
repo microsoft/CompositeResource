@@ -85,8 +85,8 @@ $($Configuration.Definition)
 
     New-ModuleManifest -Path $modulePsd1 `
         -Guid (New-Guid).Guid `
-        -Author $Author`
-        -Description $Description`
+        -Author $Author `
+        -Description $Description `
         -ModuleVersion $ModuleVersion `
         -DscResourcesToExport $resourceNames
 
