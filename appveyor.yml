@@ -4,8 +4,8 @@
 os: Unstable
 version: 0.3.{build}.0
 install:
-  - cinst -y pester, psdscresources
   - ps: Get-PackageProvider -Name NuGet -Force
+  - ps: Install-Module -Name Pester, PSDscResources -Force
 environment:
   APIKEY:
     secure: xQyAvpwa7/xHj0aSKBT81UeFjHWiG09U+nE5bobRvE3iCb9rG27NdDlR8XT1EavM
