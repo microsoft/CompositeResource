@@ -125,9 +125,9 @@ InModuleScope 'CompositeResource' {
 
                 $resourceManifest = Import-PowerShellDataFile -Path $resourceManifestPath
                 $resourceManifest.GUID | Should -Be $mockGuid
-                $resourceManifest.Author | Should -Be $env:USERNAME
+                $resourceManifest.Author | Should -Be 'Composite Resource Module'
                 $resourceManifest.CompanyName | Should -Be 'Unknown'
-                $resourceManifest.Copyright | Should -Be ('(c) {0} {1}. All rights reserved.' -f (Get-Date).Year, $env:USERNAME)
+                $resourceManifest.Copyright | Should -Be ('(c) {0} {1}. All rights reserved.' -f (Get-Date).Year, 'Composite Resource Module')
                 $resourceManifest.ModuleVersion | Should -Be '1.0'
                 $resourceManifest.FunctionsToExport | Should -Be '*'
                 $resourceManifest.VariablesToExport | Should -Be '*'
