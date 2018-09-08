@@ -1,8 +1,6 @@
 $modulePath = Split-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -Parent
 Import-Module -Name $modulePath
 
-Install-Module -Name PSDscResources -Scope CurrentUser -Force
-
 InModuleScope 'CompositeResource' {
     Describe 'ConvertTo-CompositeResource' {
         BeforeAll {
