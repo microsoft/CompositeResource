@@ -4,8 +4,11 @@
 os: Unstable
 version: 0.3.{build}.0
 install:
-  - cinst -y pester
-  - ps: Get-PackageProvider -Name NuGet -Force
+  - ps: |
+      Get-PackageProvider -Name NuGet -ForceBootstrap
+      Install-Module -Name PowerShellGet -Force -Repository PSGallery
+  - ps: |
+      Install-Module -Name Pester, PSDscResources -Force
 environment:
   APIKEY:
     secure: xQyAvpwa7/xHj0aSKBT81UeFjHWiG09U+nE5bobRvE3iCb9rG27NdDlR8XT1EavM
@@ -50,5 +53,6 @@ before_deploy:
 on_finish:
 - ps: #$blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
-on_success:
-  - ps: Publish-Module -NuGetAPIKey $env:APIKEY -Path $pwd
+deploy_script:
+  - ps: |
+      Publish-Module -NuGetAPIKey $env:APIKEY -Path $pwd

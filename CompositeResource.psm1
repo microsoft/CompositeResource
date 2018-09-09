@@ -28,7 +28,7 @@ function ConvertTo-CompositeResource
         # Author to list in module manifest
         [Parameter()]
         [string]
-        $Author = 'Composite Resource Module',
+        $Author = $env:USERNAME,
         
         # Description to list in module manifest
         [Parameter()]
@@ -85,8 +85,8 @@ $($Configuration.Definition)
 
     New-ModuleManifest -Path $modulePsd1 `
         -Guid (New-Guid).Guid `
-        -Author $Author`
-        -Description $Description`
+        -Author $Author `
+        -Description $Description `
         -ModuleVersion $ModuleVersion `
         -DscResourcesToExport $resourceNames
 
