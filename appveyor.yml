@@ -2,7 +2,7 @@
 #      environment configuration  #
 #---------------------------------#
 os: Unstable
-version: 0.4.{build}.0
+version: 0.4.{build}
 install:
   - ps: |
       Get-PackageProvider -Name NuGet -ForceBootstrap
@@ -43,7 +43,7 @@ before_deploy:
   - ps: |
       # Update Manifest File
       $manifest = Join-Path $pwd "$env:APPVEYOR_PROJECT_NAME.psd1"
-      (Get-Content $manifest -Raw).Replace("0.1.0.0", $env:APPVEYOR_BUILD_VERSION) | Set-Content $manifest
+      (Get-Content $manifest -Raw).Replace("0.1.0", $env:APPVEYOR_BUILD_VERSION) | Set-Content $manifest
 
 #---------------------------------#
 #      after build                #
