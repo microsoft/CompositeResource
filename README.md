@@ -21,7 +21,7 @@ Output:
 By default the tool will write a new folder based on the configuration name + 'DSC',
 e.g. 'TestDSC'.
 The folder contains a version folder which then contains a module and manifest.
-The module should be immediately functional once it is copied in to a path present
+The module should be immediately functional once it is copied into a path present
 in `$env:PSModulePath`.
 
 To test if the resource is available, run the command:
