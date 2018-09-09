@@ -124,7 +124,7 @@ InModuleScope 'CompositeResource' {
                 $resourceManifest = Import-PowerShellDataFile -Path $resourceManifestPath
                 $resourceManifest.GUID | Should -Be $mockGuid
                 $resourceManifest.Author | Should -Be $env:USERNAME
-                $resourceManifest.ModuleVersion | Should -Be '0.0.1'
+                $resourceManifest.ModuleVersion | Should -Be '1.0'
                 $resourceManifest.FunctionsToExport | Should -Be '*'
                 $resourceManifest.VariablesToExport | Should -Be '*'
                 $resourceManifest.CmdletsToExport  | Should -Be '*'
@@ -253,7 +253,7 @@ Configuration Example
                 $resourceManifest = Import-PowerShellDataFile -Path $resourceManifestPath
                 $resourceManifest.GUID | Should -Be $mockGuid
                 $resourceManifest.Author | Should -Be $env:USERNAME
-                $resourceManifest.ModuleVersion | Should -Be '0.0.1'
+                $resourceManifest.ModuleVersion | Should -Be '1.0'
                 $resourceManifest.FunctionsToExport | Should -Be '*'
                 $resourceManifest.VariablesToExport | Should -Be '*'
                 $resourceManifest.CmdletsToExport  | Should -Be '*'
