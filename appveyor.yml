@@ -2,7 +2,7 @@
 #      environment configuration  #
 #---------------------------------#
 os: Unstable
-version: 0.3.{build}.0
+version: 0.4.{build}.0
 install:
   - ps: |
       Get-PackageProvider -Name NuGet -ForceBootstrap
@@ -42,7 +42,6 @@ test_script:
 before_deploy:
   - ps: |
       # Update Manifest File
-      $stagingDirectory = (Resolve-Path ..).Path
       $manifest = Join-Path $pwd "$env:APPVEYOR_PROJECT_NAME.psd1"
       (Get-Content $manifest -Raw).Replace("0.1.0.0", $env:APPVEYOR_BUILD_VERSION) | Set-Content $manifest
 
@@ -55,4 +54,4 @@ on_finish:
 
 deploy_script:
   - ps: |
-      Publish-Module -NuGetAPIKey $env:APIKEY -Path $pwd
+      if($env:APPVEYOR_REPO_BRANCH -eq 'Master'){Publish-Module -NuGetAPIKey $env:APIKEY -Path $pwd}
