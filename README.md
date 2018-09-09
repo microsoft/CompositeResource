@@ -1,6 +1,6 @@
 # Composite Resource Module
 
-[![Build status](https://ci.appveyor.com/api/projects/status/c80a8uja31avfha4/branch/master?svg=true)](https://ci.appveyor.com/project/Microsoft/CompositeResource)
+[![Build status](https://ci.appveyor.com/api/projects/status/c80a8uja31avfha4/branch/master?svg=true)](https://ci.appveyor.com/project/mgreenegit/compositeresource/branch/master)
 
 The purpose of this project is to provide a tool for converting
 [PowerShell Desired State Configuration](https://docs.microsoft.com/en-us/powershell/dsc/overview)
