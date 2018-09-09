@@ -4,7 +4,10 @@
 os: Unstable
 version: 0.3.{build}.0
 install:
-  - ps: Get-PackageProvider -Name NuGet -Force
+  - ps: Get-PackageProvider -Name NuGet -ForceBootstrap
+    Install-Module -Name PowerShellGet -Force -Repository PSGallery
+    $nugetExePath = Join-Path -Path $env:TEMP -ChildPath 'nuget.exe'
+    Install-NugetExe -OutFile $nugetExePath
   - ps: Install-Module -Name Pester, PSDscResources -Force
 environment:
   APIKEY:
@@ -50,5 +53,5 @@ before_deploy:
 on_finish:
 - ps: #$blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
-on_success:
+deploy_script:
   - ps: Publish-Module -NuGetAPIKey $env:APIKEY -Path $pwd
