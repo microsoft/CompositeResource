@@ -28,7 +28,7 @@ function ConvertTo-CompositeResource
         # Author to list in module manifest
         [Parameter()]
         [string]
-        $Author = 'Composite Resource Module',
+        $Author = $env:USERNAME,
         
         # Description to list in module manifest
         [Parameter()]
