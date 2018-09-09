@@ -7,8 +7,6 @@ install:
   - ps: |
       Get-PackageProvider -Name NuGet -ForceBootstrap
       Install-Module -Name PowerShellGet -Force -Repository PSGallery
-      $nugetExePath = Join-Path -Path $env:TEMP -ChildPath 'nuget.exe'
-      Install-NugetExe -OutFile $nugetExePath
   - ps: |
       Install-Module -Name Pester, PSDscResources -Force
 environment:
