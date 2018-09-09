@@ -1,6 +1,6 @@
 # Composite Resource Module
 
-[![Build status](https://ci.appveyor.com/api/projects/status/c80a8uja31avfha4?svg=true)](https://ci.appveyor.com/project/mgreenegit/compositeresource)
+[![Build status](https://ci.appveyor.com/api/projects/status/c80a8uja31avfha4/branch/master?svg=true)](https://ci.appveyor.com/project/mgreenegit/compositeresource/branch/master)
 
 The purpose of this project is to provide a tool for converting
 [PowerShell Desired State Configuration](https://docs.microsoft.com/en-us/powershell/dsc/overview)
@@ -10,19 +10,25 @@ to
 
 Usage:
 
-    ConvertTo-CompositeResource -ConfigurationName 'test' -Author 'Name' -Description 'Text'
+```powershell
+ConvertTo-CompositeResource -ConfigurationName 'Test' -Author 'Name' -Description 'Text'
+```
 
 Output:
 
     <no command output returned when successful>
 
-By default the tool will write a new folder based on the configuration name + 'dsc'.
+By default the tool will write a new folder based on the configuration name + 'DSC',
+e.g. 'TestDSC'.
 The folder contains a version folder which then contains a module and manifest.
-The module should be immediately functional once it is copied in to the psmodulepath.
+The module should be immediately functional once it is copied into a path present
+in `$env:PSModulePath`.
 
 To test if the resource is available, run the command:
 
-    Get-DSCResource
+```powershell
+Get-DSCResource
+```
 
 ## Release Notes
 
