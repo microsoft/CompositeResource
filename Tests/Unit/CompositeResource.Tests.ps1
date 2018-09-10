@@ -1,5 +1,5 @@
 $modulePath = Join-Path -Path (Resolve-Path -Path $env:APPVEYOR_PROJECT_NAME) -ChildPath "$env:APPVEYOR_PROJECT_NAME.psd1"
-Import-Module -Name $modulePath
+Import-Module $modulePath
 
 InModuleScope 'CompositeResource' {
     Describe 'ConvertTo-CompositeResource' {
