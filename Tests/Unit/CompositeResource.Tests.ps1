@@ -1,4 +1,4 @@
-$modulePath = Split-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -Parent
+$modulePath = Join-Path -Path (Resolve-Path -Path $env:APPVEYOR_PROJECT_NAME) -ChildPath "$env:APPVEYOR_PROJECT_NAME.psd1"
 Import-Module -Name $modulePath
 
 InModuleScope 'CompositeResource' {
