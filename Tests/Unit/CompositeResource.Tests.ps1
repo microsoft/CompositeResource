@@ -178,7 +178,7 @@ Configuration Example
                 $expectedDefinitionRows = ($expectedDefinition -replace '\n') -split '\r'
 
                 # Test so that we have equal number of rows.
-                $definitionRows.Count | Should -Be $expectedDefinitionRows.Count - 1
+                $definitionRows.Count | Should -Be ($expectedDefinitionRows.Count - 1)
 
                 for ($line = 0; $line -le $expectedDefinitionRows.Count - 1; $line++)
                 {
