@@ -156,16 +156,16 @@ InModuleScope 'CompositeResource' {
                 $expectedDefinition = @"
 Configuration Example
 {
-                Import-DscResource -ModuleName PSDesiredStateConfiguration
+    Import-DscResource -ModuleName PSDesiredStateConfiguration
 
-                node localhost
-                {
-                    WindowsFeature 'NetFramework45'
-                    {
-                        Name   = 'NET-Framework-45-Core'
-                        Ensure = 'Present'
-                    }
-                }
+    node localhost
+    {
+        WindowsFeature 'NetFramework45'
+        {
+            Name   = 'NET-Framework-45-Core'
+            Ensure = 'Present'
+        }
+    }
 }
 "@
                 $configurationDefinition.ConfigurationType | Should -Be 'Resource'
@@ -178,7 +178,7 @@ Configuration Example
                 $expectedDefinitionRows = ($expectedDefinition -replace '\n') -split '\r'
 
                 # Test so that we have equal number of rows.
-                $definitionRows.Count | Should -Be $expectedDefinitionRows.Count
+                $definitionRows.Count | Should -Be $expectedDefinitionRows.Count - 1
 
                 for ($line = 0; $line -le $expectedDefinitionRows.Count - 1; $line++)
                 {
