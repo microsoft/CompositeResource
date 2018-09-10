@@ -153,11 +153,9 @@ InModuleScope 'CompositeResource' {
                 }
 
                 $configurationDefinition = $definitionAst.Find($astFilter, $true)
-                $configurationDefinition
                 $expectedDefinition = @"
 Configuration Example
 {
-
                 Import-DscResource -ModuleName PSDesiredStateConfiguration
 
                 node localhost
@@ -168,7 +166,6 @@ Configuration Example
                         Ensure = 'Present'
                     }
                 }
-
 }
 "@
                 $configurationDefinition.ConfigurationType | Should -Be 'Resource'
