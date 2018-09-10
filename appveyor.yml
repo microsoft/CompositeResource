@@ -42,7 +42,7 @@ test_script:
 before_deploy:
   - ps: |
       # Update Manifest File
-      $manifest = Join-Path $pwd "$env:APPVEYOR_PROJECT_NAME.psd1"
+      $manifest = Join-Path $pwd\$env:APPVEYOR_PROJECT_NAME "$env:APPVEYOR_PROJECT_NAME.psd1"
       (Get-Content $manifest -Raw).Replace("0.1.0", $env:APPVEYOR_BUILD_VERSION) | Set-Content $manifest
 
 #---------------------------------#
