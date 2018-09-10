@@ -55,4 +55,4 @@ on_finish:
 deploy_script:
   - ps: |
       write-host "the current branch is $env:APPVEYOR_REPO_BRANCH"
-      if($env:APPVEYOR_REPO_BRANCH -eq 'Master'){Publish-Module -NuGetAPIKey $env:APIKEY -Path $pwd}
+      if($env:APPVEYOR_REPO_BRANCH -eq 'Master'){Publish-Module -NuGetAPIKey $env:APIKEY -Path $pwd\$env:APPVEYOR_PROJECT_NAME}
