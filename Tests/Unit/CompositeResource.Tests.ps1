@@ -153,7 +153,7 @@ InModuleScope 'CompositeResource' {
                 }
 
                 $configurationDefinition = $definitionAst.Find($astFilter, $true)
-
+                $configurationDefinition
                 $expectedDefinition = @"
 Configuration Example
 {
