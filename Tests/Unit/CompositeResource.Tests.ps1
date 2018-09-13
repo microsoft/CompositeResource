@@ -209,6 +209,7 @@ Configuration Example
 
 }
 "@
+
                 $configurationDefinition.ConfigurationType | Should -Be 'Resource'
 
                 <#
@@ -362,6 +363,113 @@ Configuration Example
 
                 $moduleManifest = Import-PowerShellDataFile -Path $moduleManifestPath
                 $moduleManifest.DscResourcesToExport | Should -Be @('MyResource1','MyResource2')
+            }
+        }
+
+        Context 'When converting a configuration from a script block' {
+            BeforeEach {
+                $convertToCompositeResourceParameters = @{
+                    ScriptBlock = $configurationScriptBlock
+                    ResourceName = 'MyResource'
+                    ModuleName = 'MyScriptModuleDsc'
+                    ModuleVersion = '1.0.0'
+                    OutputPath = $TestDrive
+                }
+
+                Mock -CommandName New-Guid -MockWith {
+                    return @{
+                        Guid = $mockGuid
+                    }
+                }
+            }
+
+            It 'Should have created the correct folder structure and correct files' {
+                {
+                    ConvertTo-CompositeResource @convertToCompositeResourceParameters
+                } | Should -Not -Throw
+
+                "$TestDrive\MyScriptModuleDsc" | Should -Exist
+                "$TestDrive\MyScriptModuleDsc\1.0.0" | Should -Exist
+                "$TestDrive\MyScriptModuleDsc\1.0.0\MyScriptModuleDsc.psd1" | Should -Exist
+                "$TestDrive\MyScriptModuleDsc\1.0.0\DSCResources" | Should -Exist
+                "$TestDrive\MyScriptModuleDsc\1.0.0\DSCResources\MyResource" | Should -Exist
+                "$TestDrive\MyScriptModuleDsc\1.0.0\DSCResources\MyResource\MyResource.psd1" | Should -Exist
+                "$TestDrive\MyScriptModuleDsc\1.0.0\DSCResources\MyResource\MyResource.schema.psm1" | Should -Exist
+            }
+
+            It 'Should have written the correct content to the module manifest' {
+                {
+                    ConvertTo-CompositeResource @convertToCompositeResourceParameters
+                } | Should -Not -Throw
+
+                $moduleManifestPath = "$TestDrive\MyScriptModuleDsc\1.0.0\MyScriptModuleDsc.psd1"
+
+                $moduleManifest = Import-PowerShellDataFile -Path $moduleManifestPath
+                $moduleManifest.DscResourcesToExport | Should -Be @('MyResource')
+            }
+
+            It 'Should have written the correct content to the composite resource module file' {
+                {
+                    ConvertTo-CompositeResource @convertToCompositeResourceParameters
+                } | Should -Not -Throw
+
+                $resourceModulePath = "$TestDrive\MyScriptModuleDsc\1.0.0\DSCResources\MyResource\MyResource.schema.psm1"
+
+                $parseErrors = $null
+                $definitionAst = [System.Management.Automation.Language.Parser]::ParseFile($resourceModulePath, [ref] $null, [ref] $parseErrors)
+
+                if ($parseErrors)
+                {
+                    throw $parseErrors
+                }
+
+                $astFilter = {
+                    $args[0] -is [System.Management.Automation.Language.ConfigurationDefinitionAst]
+                }
+
+                $configurationDefinition = $definitionAst.Find($astFilter, $true)
+
+                <#
+                    Each line must exist as it does in the actual output of the
+                    definition, but the test will trim any existing white space
+                    characters before and after each row. It will do this for
+                    both the expected and the actual definition.
+                #>
+                $expectedDefinition = @"
+Configuration MyResource
+{
+
+    Import-DscResource -ModuleName PSDesiredStateConfiguration
+
+    node localhost
+    {
+        WindowsFeature 'NetFramework45'
+        {
+            Name   = 'NET-Framework-45-Core'
+            Ensure = 'Present'
+        }
+    }
+
+}
+"@
+
+                $configurationDefinition.ConfigurationType | Should -Be 'Resource'
+
+                <#
+                    We remove carriage return  character before splitting so we
+                    always know the correct line-ending character.
+                #>
+                $definitionRows = ($configurationDefinition.Extent.Text -replace '\r') -split '\n'
+                $expectedDefinitionRows = ($expectedDefinition -replace '\r') -split '\n'
+
+                # Test so that we have equal number of rows.
+                $definitionRows.Count | Should -Be $expectedDefinitionRows.Count
+
+                for ($line = 0; $line -le $expectedDefinitionRows.Count - 1; $line++)
+                {
+                    # Trimming any white space characters before and after each line.
+                    $definitionRows[$line].Trim() | Should -Be $expectedDefinitionRows[$line].Trim()
+                }
             }
         }
     }

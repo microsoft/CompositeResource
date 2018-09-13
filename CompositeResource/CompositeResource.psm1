@@ -14,6 +14,12 @@
     .PARAMETER ConfigurationName
         The configuration name to convert into a composite resource. The
         configuration name must exist in the session.
+        If this is used, then the parameter ScriptBlock cannot be used.
+
+    .PARAMETER ScriptBlock
+        A script block containing the configuration to convert into a composite
+        resource.
+        If this is used, then the parameter ConfigurationName cannot be used.
 
     .PARAMETER ResourceName
         The name of the composite resource that will be created. Defaults to
@@ -53,12 +59,16 @@
 #>
 function ConvertTo-CompositeResource
 {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'ByConfiguration')]
     param
     (
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'ByConfiguration')]
         [string]
         $ConfigurationName,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'ByScriptBlock')]
+        [ScriptBlock]
+        $ScriptBlock,
 
         [Parameter()]
         [string]
@@ -85,10 +95,76 @@ function ConvertTo-CompositeResource
         $OutputPath = '.\'
     )
 
-    $configuration = Get-Command -Name $ConfigurationName -CommandType 'Configuration' -ErrorAction SilentlyContinue
-    if (-not $configuration)
+    switch ($PsCmdlet.ParameterSetName)
     {
-        throw ('Could not find a configuration ''{0}'' loaded in the session.' -f $ConfigurationName)
+        "ByConfiguration"
+        {
+            $configuration = Get-Command -Name $ConfigurationName -CommandType 'Configuration' -ErrorAction SilentlyContinue
+            if (-not $configuration)
+            {
+                throw ('Could not find a configuration ''{0}'' loaded in the session.' -f $ConfigurationName)
+            }
+        }
+
+        "ByScriptBlock"
+        {
+            # Get the configuration definition ast.
+            $parseErrors = $null
+            $definitionAst = [System.Management.Automation.Language.Parser]::ParseInput($ScriptBlock, [ref] $null, [ref] $parseErrors)
+
+            if ($parseErrors)
+            {
+                throw $parseErrors
+            }
+
+            $astFilter = {
+                $args[0] -is [System.Management.Automation.Language.ConfigurationDefinitionAst]
+            }
+
+            $configurationDefinitionAst = $definitionAst.Find($astFilter, $false)
+
+            $configurationDefinitionScriptBlock = [ScriptBlock]::Create($configurationDefinitionAst.Body.Extent.Text)
+
+            # Get the script block definition ast, from the result of the configuration definition ast.
+            $parseErrors = $null
+            $definitionAst = [System.Management.Automation.Language.Parser]::ParseInput($configurationDefinitionScriptBlock, [ref] $null, [ref] $parseErrors)
+
+            if ($parseErrors)
+            {
+                throw $parseErrors
+            }
+
+            $astFilter = {
+                $args[0] -is [System.Management.Automation.Language.ScriptBlockAst]
+            }
+
+            $configurationContentDefinitionAst = $definitionAst.Find($astFilter, $false)
+
+            # Removes the beginning open brace an ending closing brace of the script block.
+            $configurationDefinition = $configurationContentDefinitionAst.Extent.Text
+            $configurationDefinition = `
+                $configurationDefinition.Remove($configurationContentDefinitionAst.Extent.EndScriptPosition.Offset - 1, 1)
+            $configurationDefinition = `
+                $configurationDefinition.Remove($configurationContentDefinitionAst.Extent.StartScriptPosition.Offset, 1)
+
+            # Build the correct configuration values.
+            $configuration = @{
+                Definition =  $configurationDefinition
+            }
+
+            $ConfigurationName = $configurationDefinitionAst.InstanceName.Value
+
+            # Set default values if they are not set.
+            if (-not $PSBoundParameters.ContainsKey('ResourceName'))
+            {
+                $ResourceName = $ConfigurationName
+            }
+
+            if (-not $PSBoundParameters.ContainsKey('ModuleName'))
+            {
+                $ModuleName = "$($ConfigurationName)DSC"
+            }
+        }
     }
 
     $moduleFolder = Join-Path -Path $OutputPath -ChildPath $ModuleName
@@ -109,7 +185,7 @@ function ConvertTo-CompositeResource
     Set-Content -Path $resourcePsm1 -Value @"
 Configuration $ResourceName
 {
-$($Configuration.Definition)
+$($configuration.Definition)
 }
 "@
 
