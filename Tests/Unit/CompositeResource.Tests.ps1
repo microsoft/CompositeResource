@@ -456,7 +456,7 @@ Configuration MyResource
                 $configurationDefinition.ConfigurationType | Should -Be 'Resource'
 
                 <#
-                    We remove carriage return  character before splitting so we
+                    We remove carriage return character before splitting so we
                     always know the correct line-ending character.
                 #>
                 $definitionRows = ($configurationDefinition.Extent.Text -replace '\r') -split '\n'
