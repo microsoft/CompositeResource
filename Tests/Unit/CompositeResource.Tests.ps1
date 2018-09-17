@@ -68,29 +68,29 @@ InModuleScope 'CompositeResource' {
                 }
             }
 
-            $configurationScriptBlock = {
-                <#
-                    .DESCRIPTION
-                        This is the configuration description.
+            $configurationScript = @"
+<#
+    .DESCRIPTION
+        This is the configuration description.
 
-                    .NOTES
-                        This is notes about the configuration.
-                #>
-                Configuration Example3
-                {
-                    Import-DscResource -ModuleName PSDesiredStateConfiguration
+    .NOTES
+        This is notes about the configuration.
+#>
+Configuration Example3
+{
+    Import-DscResource -ModuleName PSDesiredStateConfiguration
 
-                    node localhost
-                    {
-                        WindowsFeature 'NetFramework45'
-                        {
-                            Name   = 'NET-Framework-45-Core'
-                            Ensure = 'Present'
-                        }
-                    }
-                }
-            }
-            # --- END MOCK CONFIGURATION
+    node localhost
+    {
+        WindowsFeature 'NetFramework45'
+        {
+            Name   = 'NET-Framework-45-Core'
+            Ensure = 'Present'
+        }
+    }
+}
+# --- END MOCK CONFIGURATION
+"@
         }
 
         AfterAll {
@@ -366,10 +366,10 @@ Configuration Example
             }
         }
 
-        Context 'When converting a configuration from a script block' {
+        Context 'When converting a configuration from a script' {
             BeforeEach {
                 $convertToCompositeResourceParameters = @{
-                    ScriptBlock = $configurationScriptBlock
+                    Script = $configurationScript
                     ResourceName = 'MyResource'
                     ModuleName = 'MyScriptModuleDsc'
                     ModuleVersion = '1.0.0'

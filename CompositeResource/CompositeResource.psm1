@@ -14,9 +14,9 @@
     .PARAMETER ConfigurationName
         The configuration name to convert into a composite resource. The
         configuration name must exist in the session.
-        If this is used, then the parameter ScriptBlock cannot be used.
+        If this is used, then the parameter Script cannot be used.
 
-    .PARAMETER ScriptBlock
+    .PARAMETER Script
         A script block containing the configuration to convert into a composite
         resource.
         If this is used, then the parameter ConfigurationName cannot be used.
@@ -62,13 +62,13 @@ function ConvertTo-CompositeResource
     [CmdletBinding(DefaultParameterSetName = 'ByConfiguration')]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'ByConfiguration')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'ByConfigurationName')]
         [string]
         $ConfigurationName,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'ByScriptBlock')]
-        [ScriptBlock]
-        $ScriptBlock,
+        [Parameter(Mandatory = $true, ParameterSetName = 'ByScript')]
+        [string]
+        $Script,
 
         [Parameter()]
         [string]
@@ -97,7 +97,7 @@ function ConvertTo-CompositeResource
 
     switch ($PsCmdlet.ParameterSetName)
     {
-        "ByConfiguration"
+        "ByConfigurationName"
         {
             $configuration = Get-Command -Name $ConfigurationName -CommandType 'Configuration' -ErrorAction SilentlyContinue
             if (-not $configuration)
@@ -106,11 +106,11 @@ function ConvertTo-CompositeResource
             }
         }
 
-        "ByScriptBlock"
+        "ByScript"
         {
             # Get the configuration definition ast.
             $parseErrors = $null
-            $definitionAst = [System.Management.Automation.Language.Parser]::ParseInput($ScriptBlock, [ref] $null, [ref] $parseErrors)
+            $definitionAst = [System.Management.Automation.Language.Parser]::ParseInput($Script, [ref] $null, [ref] $parseErrors)
 
             if ($parseErrors)
             {
@@ -123,11 +123,9 @@ function ConvertTo-CompositeResource
 
             $configurationDefinitionAst = $definitionAst.Find($astFilter, $false)
 
-            $configurationDefinitionScriptBlock = [ScriptBlock]::Create($configurationDefinitionAst.Body.Extent.Text)
-
             # Get the script block definition ast, from the result of the configuration definition ast.
             $parseErrors = $null
-            $definitionAst = [System.Management.Automation.Language.Parser]::ParseInput($configurationDefinitionScriptBlock, [ref] $null, [ref] $parseErrors)
+            $definitionAst = [System.Management.Automation.Language.Parser]::ParseInput($configurationDefinitionAst.Body.Extent.Text, [ref] $null, [ref] $parseErrors)
 
             if ($parseErrors)
             {
