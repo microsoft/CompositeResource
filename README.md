@@ -14,6 +14,26 @@ Usage:
 ConvertTo-CompositeResource -ConfigurationName 'Test' -Author 'Name' -Description 'Text'
 ```
 
+```powershell
+$configurationScript = @"
+Configuration Example3
+{
+    Import-DscResource -ModuleName PSDesiredStateConfiguration
+
+    node localhost
+    {
+        WindowsFeature 'NetFramework45'
+        {
+            Name   = 'NET-Framework-45-Core'
+            Ensure = 'Present'
+        }
+    }
+}
+"@
+
+ConvertTo-CompositeResource -Script $configurationScript -Author 'Name' -Description 'Text'
+```
+
 Output:
 
     <no command output returned when successful>
@@ -27,7 +47,7 @@ in `$env:PSModulePath`.
 To test if the resource is available, run the command:
 
 ```powershell
-Get-DSCResource
+Get-DscResource
 ```
 
 ## Release Notes
