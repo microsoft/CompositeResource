@@ -14,6 +14,8 @@ Usage:
 ConvertTo-CompositeResource -ConfigurationName 'Test' -Author 'Name' -Description 'Text'
 ```
 
+or
+
 ```powershell
 $configurationScript = @"
 Configuration Example3
