@@ -9,7 +9,7 @@
 .PROJECTURI
 .ICONURI
 .EXTERNALMODULEDEPENDENCIES
-.REQUIREDSCRIPTS Import-CompositeResourceDependentModules,Import-PrerequisitesModules,Merge-DscGallerySamplesToResourceModule
+.REQUIREDSCRIPTS Import-DscGallerySamplesCompositeResourceDependentModules,Import-DscGallerySamplesPrerequisitesModules,Merge-DscGallerySamplesToResourceModule
 .EXTERNALSCRIPTDEPENDENCIES
 .RELEASENOTES
 Version 1.0.0:  First published version.
@@ -83,7 +83,7 @@ $defaultParameters = @{
     AutomationAccountName = $AutomationAccountName
 }
 
-Write-Verbose -Message 'Starting runbook Import-PrerequisitesModules.' -Verbose
+Write-Verbose -Message 'Starting runbook Import-DscGallerySamplesPrerequisitesModules.' -Verbose
 
 $runbookParameters = $defaultParameters.Clone()
 $runbookParameters += @{
@@ -92,14 +92,14 @@ $runbookParameters += @{
 
 $startAzureRmAutomationRunbookParameters = $defaultParameters.Clone()
 $startAzureRmAutomationRunbookParameters += @{
-    Name       = 'Import-PrerequisitesModules'
+    Name       = 'Import-DscGallerySamplesPrerequisitesModules'
     Wait       = $true
     Parameters = $runbookParameters
 }
 
 Start-AzureRmAutomationRunbook @startAzureRmAutomationRunbookParameters
 
-Write-Verbose -Message 'Starting runbook Import-CompositeResourceDependentModules.' -Verbose
+Write-Verbose -Message 'Starting runbook Import-DscGallerySamplesCompositeResourceDependentModules.' -Verbose
 
 $runbookParameters = $defaultParameters.Clone()
 $runbookParameters += @{
@@ -108,7 +108,7 @@ $runbookParameters += @{
 
 $startAzureRmAutomationRunbookParameters = $defaultParameters.Clone()
 $startAzureRmAutomationRunbookParameters += @{
-    Name       = 'Import-CompositeResourceDependentModules'
+    Name       = 'Import-DscGallerySamplesCompositeResourceDependentModules'
     Wait       = $true
     Parameters = $runbookParameters
 }
