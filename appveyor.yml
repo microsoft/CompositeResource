@@ -2,7 +2,7 @@
 #      environment configuration  #
 #---------------------------------#
 os: Unstable
-version: 0.4.{build}
+version: 1.0.{build}
 install:
   - ps: |
       Get-PackageProvider -Name NuGet -ForceBootstrap
