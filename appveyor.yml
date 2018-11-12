@@ -55,9 +55,17 @@ on_finish:
 deploy_script:
   - ps: |
       write-host "the current branch is $env:APPVEYOR_REPO_BRANCH"
-      
-      if($env:APPVEYOR_REPO_BRANCH -eq 'Master'){
-      $env:psmodulepath = $env:psmodulepath + ";$pwd\$env:APPVEYOR_PROJECT_NAME"
-      import-module $manifest
-      Publish-Module -NuGetAPIKey $env:APIKEY -Module $env:APPVEYOR_PROJECT_NAME
-          }
+
+      if($env:APPVEYOR_REPO_BRANCH -eq 'Master')
+      {
+        # Publish the runbooks
+        Publish-Script -NuGetApiKey $env:APIKEY -Path "$pwd\Runbooks\Deploy-DscGallerySamplesAsResourceModule.ps1"
+        Publish-Script -NuGetApiKey $env:APIKEY -Path "$pwd\Runbooks\Import-CompositeResourceDependentModules.ps1"
+        Publish-Script -NuGetApiKey $env:APIKEY -Path "$pwd\Runbooks\Import-PrerequisitesModulese.ps1"
+        Publish-Script -NuGetApiKey $env:APIKEY -Path "$pwd\Runbooks\Merge-DscGallerySamplesToResourceModule.ps1"
+        
+        # Publish the module
+        $env:psmodulepath = $env:psmodulepath + ";$pwd\$env:APPVEYOR_PROJECT_NAME"
+        import-module $manifest
+        Publish-Module -NuGetAPIKey $env:APIKEY -Module $env:APPVEYOR_PROJECT_NAME
+      }
