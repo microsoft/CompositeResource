@@ -54,11 +54,10 @@ on_finish:
 
 deploy_script:
   - ps: |
-      write-out "the current branch is $env:APPVEYOR_REPO_BRANCH"
-
-      $env:psmodulepath = $env:psmodulepath + ";$pwd\$env:APPVEYOR_PROJECT_NAME"
-      import-module $manifest
+      write-host "the current branch is $env:APPVEYOR_REPO_BRANCH"
       
       if($env:APPVEYOR_REPO_BRANCH -eq 'Master'){
+      $env:psmodulepath = $env:psmodulepath + ";$pwd\$env:APPVEYOR_PROJECT_NAME"
+      import-module $manifest
       Publish-Module -NuGetAPIKey $env:APIKEY -Module $env:APPVEYOR_PROJECT_NAME
           }
