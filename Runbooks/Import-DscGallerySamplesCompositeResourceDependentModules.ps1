@@ -9,7 +9,7 @@
 .PROJECTURI
 .ICONURI
 .EXTERNALMODULEDEPENDENCIES
-.REQUIREDSCRIPTS Deploy-DscGallerySamplesAsResourceModule,Import-DscGallerySamplesPrerequisitesModules,Merge-DscGallerySamplesToResourceModule
+.REQUIREDSCRIPTS
 .EXTERNALSCRIPTDEPENDENCIES
 .RELEASENOTES
 Version 1.0.0:  First published version.
