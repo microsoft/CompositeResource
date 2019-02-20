@@ -8,14 +8,30 @@ The purpose of this project is to provide a tool for converting
 to
 [composite resources](https://docs.microsoft.com/en-us/powershell/dsc/authoringresourcecomposite).
 
-Usage:
-
+## Installation:
 ```powershell
-ConvertTo-CompositeResource -ConfigurationName 'Test' -Author 'Name' -Description 'Text'
+Install-Module -Name compositeresource
 ```
 
-or
+## Usage:
 
+### From configuration file
+
+If you are using MyConfiguration.ps1:
+```powershell
+Configuration sampleConfig
+{
+
+}
+```
+you must first load the confguration into memory by executing MyConfiguration.ps1. 
+```powershell
+ConvertTo-CompositeResource -ConfigurationName 'sampleConfig' -Author 'Name' -Description 'Text'
+```
+
+### From script
+
+You can also compose the entire configuration inline and pass it in with the **-script** parameter. 
 ```powershell
 $configurationScript = @"
 Configuration Example3
