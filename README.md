@@ -14,6 +14,9 @@ Install-Module -Name compositeresource
 ```
 
 ## Usage:
+=======
+The tool does not convert a *script file*, it converts a *configuration*. 
+This way writing out to a temporary file is never required.
 
 ### From configuration file
 
